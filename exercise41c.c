@@ -1,59 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#define MAX_RAND 170
-#define MIN_RAND -50
+#define MAX_RAND 10
+#define MIN_RAND 0
+#define RANDOM_AMOUNT 1000
 
 int main(void)
 {
     int random_number;
-    int even_temp, odd_temp = 0;
-    int original_array[15]={0};
-    int even_array[15]={0};
-    int odd_array[15]={0};
+    int array[MAX_RAND+1]={0};
     srand(time(NULL));
 
-    for (int i = 0; i<15; i++) {
-        random_number=rand() %(MAX_RAND+1) MIN_RAND;
-        original_array[i] = random_number;
+    for (int i = 1; i <= RANDOM_AMOUNT; ++i) {
+        random_number=rand() %(MAX_RAND+1)-MIN_RAND;
+        array[random_number]++;
+        //printf("%d\n",random_number);
     }
-
-    for (int i = 0; i<15; i++) {
-        if (original_array[i]%2==0) {
-            even_array[even_temp] = original_array[i];
-            even_temp++;
-        } else {
-            odd_array[odd_temp] = original_array[i];
-            odd_temp++;
-        }
+    for (int i = 0; i <= MAX_RAND; ++i) {
+        printf(" number  %d occurred %d times\n",i,array[i]);
     }
-
-    printf("All numbers are:\n");
-    for (int i = 0; i < 15; i++) {
-        printf("%d ", original_array[i]);
-    }
-
-    int odd_size = sizeof(odd_array) / sizeof(odd_array[0]);
-    printf("\nOdd numbers are:\n");
-    for (int i = 0; i < odd_size; i++) {
-        if (odd_array[i] != 0) {
-            printf("%d ", odd_array[i]);
-        }
-    }
-
-    int even_size = sizeof(even_array) / sizeof(even_array[0]);
-    printf("\nEven numbers are:\n");
-    for (int i = 0; i < even_size; i++) {
-        if (even_array[i] != 0) {
-            printf("%d ", even_array[i]);
-        }
-    }
-
-    for (int i = 0; i < 15; i++) {
-        if (original_array[i] == 0) {
-            printf("%d ", original_array[i]);
-        }
-    }
-
     return 0;
 }
