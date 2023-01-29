@@ -20,19 +20,19 @@ int main(void)
         array[random_number]++;
     }
 
-//TODO: laita vielä printit oikein
-
+/*
 for (int i = 0; i<39; i++) {
     printf("%d ", array[i]);
 }
+*/
 
-
-int num = 0;
-    printf("\nUser played numbers: ");
+//int num = 0;
+    printf("\nUser played numbers:");
     for (int i = 0; i<=39; i++) {
         if (array[i]==1) {
-            printf("%d: %d \n",num, i);
-            num++;
+            printf(" %d,", i);
+            //num++;
         }
     }
+    printf("\b ");
 }
