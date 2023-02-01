@@ -11,7 +11,7 @@ int main(void)
     for(int i=0 ; i<=10 ; i++)
     {
         int result = i*given_number;
-        printf("%d * %d = %d\n",i, given_number, result);
+        printf("%2d * %d = %d\n",i, given_number, result);
     }
     return 0;
 }

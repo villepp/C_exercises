@@ -13,5 +13,5 @@ int main(void) {
     int random_value;
     srand(time(NULL));
     random_value = suffle_number();
-    printf("%d", random_value);
+    printf("The returned random value is %d", random_value);
 }

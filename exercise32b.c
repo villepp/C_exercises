@@ -7,7 +7,7 @@ int main(void)
 
     for(int i=0 ; i<10; i++)
     {
-        printf("%d   %d\n",i, array[i]);
+        printf("%d   %3d\n",i, array[i]);
     }
     return 0;
 }

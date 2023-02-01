@@ -17,7 +17,7 @@ int main(void)
         //printf("%d\n",random_number);
     }
     for (int i = 0; i <= MAX_RAND; ++i) {
-        printf(" number  %d occurred %d times\n",i,array[i]);
+        printf(" number %2d occurred %3d times\n",i,array[i]);
     }
     return 0;
 }

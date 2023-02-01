@@ -29,9 +29,9 @@ int main(void)
     for (int i = 0; i<RANDOM_AMOUNT; i++) {
         printf("%d ", array[i]);
     }
-    printf("]\n and the biggest number was %d and smallest was %d\n\n", biggest_number, smallest_number);
+    printf("]\n and the biggest number was %d and smallest was %d\n\n   ", biggest_number, smallest_number);
 
-    for (int i = 0; i<=biggest_number; i++) {
+    for (int i = 0; i<=biggest_number; i++) { //should this print the last number, 10, or not?
         if(i%10 == 0) {
                 printf("%d", i/10);
             }
@@ -40,12 +40,12 @@ int main(void)
             }
     }
 
-    printf("\n");
+    printf("\n   ");
     for (int i = 0; i<=biggest_number; i++) {
         printf("%d",i%10);
     }
 
-    printf("\n");
+    printf("\n   ");
     for (int i = 0; i<=biggest_number; i++) {
         printf("-");
     }
