@@ -10,7 +10,8 @@ int main(void){
     printf("Give character to be searched: ");
     char c;
     scanf("%c",&c);
-    printf("%d",count_char(str, c));
+
+    printf("\nIn string, there is %d of selected characters",count_char(str, c));
 }
 
 int count_char(char str[], char c) {

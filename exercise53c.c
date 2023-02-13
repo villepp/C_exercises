@@ -11,7 +11,7 @@ void sort_array(int array[], int size);
 int main(void){
     int random_number = 0;
     int size = 0;
-    int array[RANDOM_AMOUNT] = {0};
+    int array[RANDOM_AMOUNT];
 
     srand(time(NULL));
 
@@ -21,23 +21,20 @@ int main(void){
     size++;
     }
 
+    printf("original array is:  ");
     for (int i = 0; i < RANDOM_AMOUNT; i++)
     {
-        printf("%d ", array[i]);
+        printf("%d,", array[i]);
     }
     printf("\n");
     sort_array(array,size);
     
-    for (int i = 0; i < RANDOM_AMOUNT+1; i++)
+    printf("Sorted array is:   ");
+    for (int i = 0; i < RANDOM_AMOUNT; i++)
     {
-        if (array[i] >= MIN_RAND && array[i] <= MAX_RAND){
-        printf("%d ", array[i]);
-        } else {
-            continue;
-        }
+        printf("%d,", array[i]);
     }
-    
-    
+    return 0;
 }
 
 void sort_array(int array[], int size) {
