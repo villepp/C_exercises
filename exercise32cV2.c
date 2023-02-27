@@ -22,7 +22,7 @@ int main(void) {
     }
 	
     float mean = (float)sum/10;
-    int last_int = array[10 -1]; //we know that we are asking for 10 numbers, 10 represents size of array.
+    int last_int = array[10 - 1]; //we are asking for 10 numbers, 10 represents size of array, index of last is 9.
     printf("%d ] is %.1f", last_int, mean);
 	
     return 0;
