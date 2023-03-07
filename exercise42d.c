@@ -11,7 +11,7 @@ int main(void) {
 
     //printf("The length of the string is: %d\n", string_length-1); //minus 1 because of string ending character
     char copied_string[50];
-    int i;
+    int i = 0;
     while (user_string[i]!='\0')
     {
         copied_string[i]=("%c", user_string[i]);
