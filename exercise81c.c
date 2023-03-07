@@ -5,7 +5,7 @@ int guess_the_number(int number_to_be_guessed, int* tries_used);
 int main()
 {
     srand(time(NULL));
-    int guessed_num = rand() % 5 + 1;
+    int guessed_num = rand() % 100 + 1;
     int tries_used;
     int result = guess_the_number(guessed_num, &tries_used);
     if (result == 1)
