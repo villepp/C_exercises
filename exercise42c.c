@@ -2,9 +2,9 @@
 #include <string.h>
 
 int main(void) {
-    char user_string[50];
+    char user_string[100];
     printf("Give string: ");
-    fgets(user_string,30,stdin);
+    fgets(user_string,100,stdin);
 
     //printf("%s", user_string);
     int string_length = strlen(user_string);
