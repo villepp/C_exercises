@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <ctype.h>
-
+#include <string.h>
 
 int count_vowels(char manipulated_string[]){
     int i = 0;
@@ -21,23 +21,44 @@ void display_menu(void){
 }
 
 char ask_command(void){
-    char user_character[1];
+    char user_character[2];
     printf("\nGive command: \n");
-    fgets(user_character,2,stdin);
+    fgets(user_character, 2, stdin);
     user_character[0] = toupper(user_character[0]);
-    printf("%s",user_character);
-            if((user_character[0] >= 'A' && user_character[0] <= 'H') || (user_character[0] == 'M'||'X')  ){
-                if (user_character[0]=='A') {
-                    int vowels = count_vowels(manipulated_string);
-                    printf("\nVowels: %d",vowels);
-                } else if (user_character[0]=='F'){
-                    read_string(manipulated_string);
-                }
-            }
+    if((user_character[0] >= 'A' && user_character[0] <= 'H') || (user_character[0] == 'M'||'X' )){
+        //printf("%c\n", user_character[0]);
+        return user_character[0];
+    }
+}
+
+void print_string(char string[]) {
+    printf("%s\n",string);
+}
+
+void read_string(char string[]) {
+    printf("Give string:\n");
+    fgets(string, 100, stdin);
+    printf("%s\n",string);
 }
 
 
 int main(void){
-    char manipulated_string[30] = "Hello world !!";
+    char string[100] = "Hello world !!";
     display_menu();
+    char command = ask_command();
+    switch (command)
+    {
+    case 'A':
+        printf("test");
+        break;
+    case 'E':
+        print_string(string);
+        break;
+    case 'F':
+        read_string(string);
+        break;
+    
+    default:
+        break;
+    }
 }
