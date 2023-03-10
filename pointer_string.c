@@ -7,10 +7,15 @@ int main(void){
     char *index_first= string;
 
     int i = 0;
-    while(*(string+i)!='\0') {
+    while(*(string+i)!='\0' || *(string+i)!=' ') {
         i++;
     }
-    char *index_last = (string+i-2); //Thought this would work with -1 but output printed a new line. So it was pointing to new line character, I guess. Maybe there's a clearer way to do this.
+   char *index_last;
+    if (*(string+i)==' '){
+      index_last =   (string+i-1);
+    } else {
+          index_last =   (string+i-2); //Thought this would work with -1 but output printed a new line. So it was pointing to new line character, I guess. Maybe there's a clearer way to do this.
+    }
     
     char temp;
     while(index_first<index_last) {
