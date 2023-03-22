@@ -6,10 +6,13 @@ int main(void) {
     printf("Give string: ");
     fgets(user_string,30,stdin);
 
-    //printf("%s", user_string);
-    //int string_length = strlen(user_string);
+    /*
+    printf("%s", user_string);
+    int string_length = strlen(user_string);
 
-    //printf("The length of the string is: %d\n", string_length-1); //minus 1 because of string ending character
+    printf("The length of the string is: %d\n", string_length-1); //minus 1 because of new line character 
+    */
+
     char copied_string[50];
     int i = 0;
     while (user_string[i]!='\0')
@@ -26,9 +29,9 @@ int main(void) {
         length++;
     }
     */
-    printf("The length of the string is: %d\n", i-1); //minus 1 because of string ending character
+    printf("The length of the string is: %d\n", i-1); //minus 1 because of new line character
 
-//strcpy(copied_string,user_string);
+    //strcpy(copied_string,user_string);
 
     printf("The copied string is: %s", copied_string);
     
