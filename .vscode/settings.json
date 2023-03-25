@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "sumof6ton": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "string.h": "c"
     }
 }
