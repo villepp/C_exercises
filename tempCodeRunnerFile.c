@@ -1,1 +1,1 @@
-\b\b
+RANDOM_AMOUNT

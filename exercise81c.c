@@ -5,7 +5,7 @@ int guess_the_number(int number_to_be_guessed, int* tries_used);
 int main()
 {
     srand(time(NULL));
-    int guessed_num = rand() % 6 + 1;
+    int guessed_num = rand() % 100 + 1;
     int tries_used;
     int result = guess_the_number(guessed_num, &tries_used);
     if (result == 1)
@@ -28,7 +28,7 @@ int guess_the_number(int guessed_num, int *tries_used) {
             *tries_used = i;    //fix?
             return 1;
         } else if (i==5) {
-            *tries_used = i;    //fix?
+            //*tries_used = i;    //fix?
             return 0;
         } else if (user_num<guessed_num) {
             printf("The number is bigger than you guessed\n");

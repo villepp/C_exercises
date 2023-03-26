@@ -22,10 +22,11 @@ int main(void){
     }
 
     printf("original array is:  ");
-    for (int i = 0; i < RANDOM_AMOUNT; i++)
+    for (int i = 0; i < RANDOM_AMOUNT-1; i++)
     {
         printf("%d,", array[i]);
     }
+    printf("%d",array[30]);
     printf("\n");
     sort_array(array,size);
     
