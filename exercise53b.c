@@ -3,35 +3,47 @@
 
 int difference(int array[]);
 
-int main(void){
+int main(void)
+{
     printf("Give  an array: ");
-    int array[MAX_ARRAY]={0};
+    int array[MAX_ARRAY] = {0};
 
     for (int i = 0; i < MAX_ARRAY; i++)
     {
-        scanf("%d",&array[i]);
+        scanf("%d", &array[i]);
 
-        if(array[i]==0){
+        if (array[i] == 0)
+        {
             break;
         }
     }
+
     float diff = difference(array);
-    printf("The difference of elements in array is: %.1f",diff);
+
+    printf("The difference of elements in array is: %.1f", diff);
+
+    return 0;
 }
 
-int difference(int array[]) {
+int difference(int array[])
+{
     int min, max = array[0];
-    int i=0;
-    while(array[i]!=0)
+    int i = 0;
+
+    while (array[i] != 0)
     {
-        if (array[i]<min){
+        if (array[i] < min)
+        {
             min = array[i];
         }
-        if (array[i]>max){
+        if (array[i] > max)
+        {
             max = array[i];
         }
         i++;
     }
-    int diff = max-min;
+
+    int diff = max - min;
+
     return diff;
 }

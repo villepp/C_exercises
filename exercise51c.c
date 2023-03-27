@@ -2,7 +2,8 @@
 
 void print_average(int a, int b);
 
-int main(void) {
+int main(void)
+{
     printf("Give number 1: ");
     int a;
     scanf("%d", &a);
@@ -12,16 +13,21 @@ int main(void) {
     scanf("%d", &b);
 
     printf("\n");
-    print_average(a,b);
+    print_average(a, b);
+    
     return 0;
 }
 
-void print_average(int a,int b) {
-    printf("User entered numbers %d and %d.\n", a,b);
-    float average = (float)(a+b)/2;
-    if(a>b) {
-    printf("Bigger number is %d average is %.1f", a,average);
-    } else {
-        printf("Bigger number is %d average is %.1f", b,average);
+void print_average(int a, int b)
+{
+    printf("User entered numbers %d and %d.\n", a, b);
+    float average = (float)(a + b) / 2;
+    if (a > b)
+    {
+        printf("Bigger number is %d average is %.1f", a, average);
+    }
+    else
+    {
+        printf("Bigger number is %d average is %.1f", b, average);
     }
 }

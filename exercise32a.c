@@ -8,10 +8,10 @@ int main(void)
 
     printf("\nThe multiplication table for %d is: \n", given_number);
 
-    for(int i=0 ; i<=10 ; i++)
+    for (int i = 0; i <= 10; i++)
     {
-        int result = i*given_number;
-        printf("%2d * %d = %d\n",i, given_number, result);
+        int result = i * given_number;
+        printf("%2d * %d = %d\n", i, given_number, result);
     }
     return 0;
 }

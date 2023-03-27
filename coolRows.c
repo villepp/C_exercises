@@ -3,18 +3,21 @@
 
 int main(void)
 {
-    printf("Input rows: ");
     int rows;
     int spaces_reduction = 2;
+
+    printf("Input rows: ");
+
     scanf("%d", &rows);
     printf("\n");
+
     for (int i = 1; i <= rows; i++)
     {
         for (int j = 0; j < i; j++)
         {
             printf("%d", i);
         }
-        for (int k = 0; k < (rows*2)-spaces_reduction; k++)
+        for (int k = 0; k < (rows * 2) - spaces_reduction; k++)
         {
             printf(" ");
         }

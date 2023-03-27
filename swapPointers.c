@@ -1,13 +1,15 @@
 #include <stdio.h>
 
-int main(void){
+int main(void)
+{
     int a, b;
     printf("Give number 1: ");
-    scanf("%d",&a);
+    scanf("%d", &a);
+    
     printf("Give number 2: ");
-    scanf("%d",&b);
+    scanf("%d", &b);
 
-    printf("Before swap: a = %d, b = %d",a,b);
+    printf("Before swap: a = %d, b = %d", a, b);
 
     int *ptr1, *ptr2;
 
@@ -20,7 +22,7 @@ int main(void){
     *ptr1 = *ptr2;
     *ptr2 = temp;
 
-    printf("\nAfter swap: a = %d, b = %d",a,b);
-    
+    printf("\nAfter swap: a = %d, b = %d", a, b);
+
     return 0;
 }

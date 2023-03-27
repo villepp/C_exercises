@@ -2,8 +2,8 @@
 
 int main(void)
 {
-    printf("Give grade ");
     char grade;
+    printf("Give grade ");
     scanf("%c", &grade);
 
     switch (grade)
@@ -27,4 +27,6 @@ int main(void)
         printf("Character is not a grade mark");
         break;
     }
+
+    return 0;
 }

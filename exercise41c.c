@@ -8,16 +8,19 @@
 int main(void)
 {
     int random_number;
-    int array[MAX_RAND+1]={0};
+    int array[MAX_RAND + 1] = {0};
     srand(time(NULL));
 
-    for (int i = 1; i <= RANDOM_AMOUNT; ++i) {
-        random_number=rand() %(MAX_RAND+1)-MIN_RAND;
+    for (int i = 1; i <= RANDOM_AMOUNT; ++i)
+    {
+        random_number = rand() % (MAX_RAND + 1) - MIN_RAND;
         array[random_number]++;
-        //printf("%d\n",random_number);
+        // printf("%d\n",random_number);
     }
-    for (int i = 0; i <= MAX_RAND; ++i) {
-        printf(" number %2d occurred %3d times\n",i,array[i]);
+    for (int i = 0; i <= MAX_RAND; ++i)
+    {
+        printf(" number %2d occurred %3d times\n", i, array[i]);
     }
+    
     return 0;
 }

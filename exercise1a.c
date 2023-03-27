@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-int main(void) {
+int main(void)
+{
         printf("C is a\n");
         printf("\t- general-purpose,\n");
         printf("\t- procedural computer programming language\n");

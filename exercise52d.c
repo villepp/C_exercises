@@ -5,15 +5,20 @@ int days_in_month(int month);
 int main(void)
 {
     char months[12][10] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
     printf("Give month: ");
     int month;
     scanf("%d", &month);
+
     int days = days_in_month(month);
-    printf("There are %d days in %s", days, months[month-1]);
+
+    printf("There are %d days in %s", days, months[month - 1]);
 }
 
-int days_in_month(int month) {
-    int days_array[] = {28,29,30,31};
+int days_in_month(int month)
+{
+    int days_array[] = {28, 29, 30, 31};
+    
     switch (month)
     {
     case 1:

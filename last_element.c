@@ -1,4 +1,4 @@
-#include <stdio.h>    
+#include <stdio.h>
 
 int main(void)
 {
@@ -6,10 +6,13 @@ int main(void)
 
     int size = sizeof(array) / sizeof(array[0]);
 
-    if(size > 0){
+    if (size > 0)
+    {
         int lastElement = array[size - 1];
         printf("Last element of array : %d \n", lastElement);
-    } else {
+    }
+    else
+    {
         printf("Array is empty \n");
     }
 

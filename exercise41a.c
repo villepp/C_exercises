@@ -7,20 +7,22 @@
 
 int main(void)
 {
-int i,array[ARRAY_SIZE];
-int random_number;
-srand(time(NULL));
+    int i, array[ARRAY_SIZE];
+    int random_number;
+    srand(time(NULL));
 
-for (i=0;i<ARRAY_SIZE;i++) {
-    random_number=rand() %(MAX_RAND+1) MIN_RAND;
-    array[i]=random_number;
-}
+    for (i = 0; i < ARRAY_SIZE; i++)
+    {
+        random_number = rand() % (MAX_RAND + 1) MIN_RAND;
+        array[i] = random_number;
+    }
 
-int max = MIN_RAND+MAX_RAND; //could be done better
-printf("Array of size %d filled with random numbers (between %d ... %d) is:\n", ARRAY_SIZE, MIN_RAND, max);
+    int max = MIN_RAND + MAX_RAND; // could be done better
+    printf("Array of size %d filled with random numbers (between %d ... %d) is:\n", ARRAY_SIZE, MIN_RAND, max);
 
-for (i=0;i<ARRAY_SIZE;i++) {
-   printf("%d ", array[i]);
-}
-return 0;
+    for (i = 0; i < ARRAY_SIZE; i++)
+    {
+        printf("%d ", array[i]);
+    }
+    return 0;
 }

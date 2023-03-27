@@ -2,7 +2,8 @@
 
 void coco_doo(int x);
 
-int main(void) {
+int main(void)
+{
     printf("Give a number: ");
     int a;
     scanf("%d", &a);
@@ -11,10 +12,10 @@ int main(void) {
     return 0;
 }
 
-void coco_doo(int number) {
+void coco_doo(int number)
+{
     for (int i = 0; i < number; i++)
     {
         printf("cock-a-doodle-doo\n");
     }
-    
 }
