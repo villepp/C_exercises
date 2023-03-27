@@ -21,11 +21,11 @@
 /***************************************************************************
  *
  * 1.  NAME
- *     stringManipulationProgram.c
+ *     string_manipulation_program.c
  *
  * 2.  DESCRIPTION
- *     Manipulate a string of characters, that can be asked from the user.
- *     Program will display a menu of different actions, and a user may
+ *     Manipulates a string of characters, that can be asked from the user.
+ *     Program will display a menu of different actions, and the user may
  *     select what action the program will perform to this string.
  *
  * 3.  VERSIONS
@@ -162,8 +162,16 @@ void print_logo()
 
 void display_menu(void)
 {
-    printf("A) Count the number of vowels in the string\nB) Count the number of consonants in the string\nC) Convert the string to uppercase\nD) Convert the string to lowercase\n");
-    printf("E) Display the current string\nF) Enter another string\nG) Read string from file\nH) Write string to file\n\nM) Display this menu\nX) Exit the program");
+    printf("A) Count the number of vowels in the string\n");
+    printf("B) Count the number of consonants in the string\n");
+    printf("C) Convert the string to uppercase\n");
+    printf("D) Convert the string to lowercase\n");
+    printf("E) Display the current string\n");
+    printf("F) Enter another string\n");
+    printf("G) Read string from file\n");
+    printf("H) Write string to file\n\n");
+    printf("M) Display this menu\n");
+    printf("X) Exit the program");
 }
 
 /*********************************************************************
