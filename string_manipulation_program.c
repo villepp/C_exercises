@@ -30,9 +30,11 @@
  *
  * 3.  VERSIONS
  *       Original:
- *         23.3.2023 / Ville Pitkänen
+ *         28.3.2023 / Ville Pitkänen
  *
  *       Version history:
+ *         23.3.2023 / Ville Pitkänen
+ *           C-course version
  *
  *
  ***************************************************************************/
@@ -50,6 +52,7 @@
 /* Control flags */
 
 /* Global constants */
+#define MAX 100
 
 /* Global variables */
 
@@ -76,7 +79,7 @@ void write_file(char string[]);
 
 int main(void)
 {
-    char string[100] = "Hello world !!"; /* Initialize the string with a default value */
+    char string[MAX] = "Hello world !!"; /* Initialize the string with a default value */
 
     print_logo();
     display_menu();
@@ -88,10 +91,10 @@ int main(void)
         switch (command)
         {
         case 'A':
-            printf("%d", count_vowels(string));
+            printf("String has %d vowels", count_vowels(string));
             break;
         case 'B':
-            printf("%d", count_consonants(string));
+            printf("String has %d consonants", count_consonants(string));
             break;
         case 'C':
             to_upper(string);
@@ -132,7 +135,7 @@ int main(void)
 ; DESCRIPTION: Prints a cool logo at the start of the program
 ;	Input: none
 ;	Output: none
-;  Used global variables: none
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       Should only be used once (see description)
 ;*********************************************************************/
@@ -155,7 +158,7 @@ void print_logo()
 ; DESCRIPTION: Displays menu of commands and their descriptions
 ;	Input: none
 ;	Output: none
-;  Used global variables: none
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
@@ -180,24 +183,31 @@ void display_menu(void)
 ; NAME: ask_command(void)
 ; DESCRIPTION: Asks for a character from the user
 ;	Input: none
-;	Output: char user_character[0]
-;  Used global variables: none
+;	Output: char user_character[0], the new command character
+            Or if the character is invalid, return -1 (error)
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       Called every time inside the while loop in main
 ;*********************************************************************/
 
 char ask_command(void)
 {
-    printf("\nGive command: \n");
-
     char user_character[3]; /* Max three characters due to newline and string ending characters */
+
+    printf("\nGive command: \n");
     fgets(user_character, 3, stdin);
 
     user_character[0] = toupper(user_character[0]);
-    if ((user_character[0] >= 'A' && user_character[0] <= 'H') || (user_character[0] == 'M' || 'X'))
-    {
+    if ((user_character[0] >= 'A' && user_character[0] <= 'H') || (user_character[0] == 'M' || user_character[0] == 'X'))
+    { /* Checks that the character is one of the available command characters */
         return user_character[0];
     }
+    else
+    {
+        printf("Invalid command!");
+    }
+
+    return -1;
 }
 
 /*********************************************************************
@@ -207,7 +217,7 @@ char ask_command(void)
 ; DESCRIPTION: Prints the current string
 ;	Input: char string[]
 ;	Output: none
-;  Used global variables: none
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
@@ -224,7 +234,7 @@ void print_string(char string[])
 ; DESCRIPTION: Reads a new string from the user, replacing previous
 ;	Input: char string[]
 ;	Output: none
-;  Used global variables: none
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
@@ -232,10 +242,10 @@ void print_string(char string[])
 void read_string(char string[])
 {
     printf("Give string:");
-    fgets(string, 100, stdin);
+    fgets(string, MAX, stdin);
 
-    string[strcspn(string, "\n")] = 0; /* Removes newline character from string*/
-    
+    string[strcspn(string, "\n")] = 0; /* Removes newline character from string */
+
     printf("%s", string);
 }
 
@@ -243,10 +253,10 @@ void read_string(char string[])
 ;	F U N C T I O N    D E S C R I P T I O N
 ;---------------------------------------------------------------------
 ; NAME: count_vowels(char string[])
-; DESCRIPTION: Counts the number of consonants in the string
-;	Input: char string[]
-;	Output: int vowels
-;  Used global variables: none
+; DESCRIPTION: Counts the number of vowels in the string
+;	Input: char string[], the user given string
+;	Output: int vowels, number of vowels
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
@@ -257,9 +267,10 @@ int count_vowels(char string[])
     int vowels = 0;
 
     while (string[i] != '\0')
-    {
-        if (toupper(string[i]) == 'A' || toupper(string[i]) == 'E' || toupper(string[i]) == 'I' || toupper(string[i]) == 'O' || toupper(string[i]) == 'U' || toupper(string[i]) == 'Y')
-        {
+    { /* Looped until the string ending character */
+        if (toupper(string[i]) == 'A' || toupper(string[i]) == 'E' || toupper(string[i]) == 'I' ||
+            toupper(string[i]) == 'O' || toupper(string[i]) == 'U' || toupper(string[i]) == 'Y')
+        { /* Increase int vowels if the current character is a vowel */
             vowels++;
         }
         i++;
@@ -273,9 +284,9 @@ int count_vowels(char string[])
 ;---------------------------------------------------------------------
 ; NAME: count_consonants(char string[])
 ; DESCRIPTION: Counts the number of consonants in the string
-;	Input: char string[]
-;	Output: int consonants
-;  Used global variables: none
+;	Input: char string[], the user given string
+;	Output: int consonants, number of consonants
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
@@ -286,11 +297,12 @@ int count_consonants(char string[])
     int consonants = 0;
 
     while (string[i] != '\0')
-    {
+    { /* Looped until the string ending character */
         if ((string[i] >= 'a' && string[i] <= 'z') || (string[i] >= 'A' && string[i] <= 'Z'))
-        {
-            if (toupper(string[i]) != 'A' && toupper(string[i]) != 'E' && toupper(string[i]) != 'I' && toupper(string[i]) != 'O' && toupper(string[i]) != 'U' && toupper(string[i]) != 'Y')
-            {
+        { /* Check if current character is an alphabet */
+            if (toupper(string[i]) != 'A' && toupper(string[i]) != 'E' && toupper(string[i]) != 'I' &&
+                toupper(string[i]) != 'O' && toupper(string[i]) != 'U' && toupper(string[i]) != 'Y')
+            { /* Only increase int consonants if the current alphabet is NOT a vowel */
                 consonants++;
             }
         }
@@ -305,9 +317,9 @@ int count_consonants(char string[])
 ;---------------------------------------------------------------------
 ; NAME: to_upper(char string[])
 ; DESCRIPTION: Transforms the string into uppercase
-;	Input: char string[]
+;	Input: char string[], user's string to be transformed
 ;	Output: none
-;  Used global variables: none
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
@@ -317,7 +329,7 @@ void to_upper(char string[])
     int i = 0;
 
     while (string[i] != '\0')
-    {
+    { /* Looped until the string ending character */
         string[i] = toupper(string[i]);
         i++;
     }
@@ -330,9 +342,9 @@ void to_upper(char string[])
 ;---------------------------------------------------------------------
 ; NAME: to_lower(char string[])
 ; DESCRIPTION: Transforms the string into lowercase
-;	Input: char string[]
+;	Input: char string[], user's string to be transformed
 ;	Output: none
-;  Used global variables: none
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
@@ -342,7 +354,7 @@ void to_lower(char string[])
     int i = 0;
 
     while (string[i] != '\0')
-    {
+    { /* Looped until the string ending character */
         string[i] = tolower(string[i]);
         i++;
     }
@@ -355,9 +367,9 @@ void to_lower(char string[])
 ;---------------------------------------------------------------------
 ; NAME: read_file(char string[])
 ; DESCRIPTION: Replaces string with the text inside of textfile.txt
-;	Input: char string[]
+;	Input: char string[], user given string
 ;	Output: none
-;  Used global variables: none
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
@@ -374,7 +386,7 @@ void read_file(char string[])
     }
     else
     {
-        while (fgets(string, 100, file_pointer) != NULL)
+        while (fgets(string, MAX, file_pointer) != NULL)
         {
             printf("%s", string);
         }
@@ -387,9 +399,9 @@ void read_file(char string[])
 ;---------------------------------------------------------------------
 ; NAME: write_file(char string[])
 ; DESCRIPTION: Replaces inside of textfile.txt with the string
-;	Input: char string[]
+;	Input: char string[], user given string
 ;	Output: none
-;  Used global variables: none
+;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
