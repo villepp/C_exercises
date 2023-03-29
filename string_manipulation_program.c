@@ -34,7 +34,7 @@
  *
  *       Version history:
  *         23.3.2023 / Ville Pitkänen
- *           C-course version
+ *           C-course's final version
  *
  *
  ***************************************************************************/
@@ -85,8 +85,10 @@ int main(void)
     display_menu();
 
     char command;
+
+    /* If user given command is X, the program stops */
     while (command != 'X')
-    { /* If user given command is X, the program stops */
+    {
         command = ask_command();
         switch (command)
         {
@@ -121,6 +123,7 @@ int main(void)
             break;
         }
     }
+
     return 0;
 } /* End of main */
 
@@ -184,7 +187,6 @@ void display_menu(void)
 ; DESCRIPTION: Asks for a character from the user
 ;	Input: none
 ;	Output: char user_character[0], the new command character
-            Or if the character is invalid, return -1 (error)
 ;   Used global variables: none
 ; REMARKS when using this function:
 ;       Called every time inside the while loop in main
@@ -198,16 +200,17 @@ char ask_command(void)
     fgets(user_character, 3, stdin);
 
     user_character[0] = toupper(user_character[0]);
-    if ((user_character[0] >= 'A' && user_character[0] <= 'H') || (user_character[0] == 'M' || user_character[0] == 'X'))
-    { /* Checks that the character is one of the available command characters */
-        return user_character[0];
-    }
-    else
+
+    /* Loops until user gives one of the available command characters */
+    while ((user_character[0] < 'A' || user_character[0] > 'H') && (user_character[0] != 'M' && user_character[0] != 'X'))
     {
-        printf("Invalid command!");
+        printf("Command invalid, try again: \n");
+        fgets(user_character, 3, stdin);
+
+        user_character[0] = toupper(user_character[0]);
     }
 
-    return -1;
+    return user_character[0];
 }
 
 /*********************************************************************
@@ -215,7 +218,7 @@ char ask_command(void)
 ;---------------------------------------------------------------------
 ; NAME: print_string(char string[])
 ; DESCRIPTION: Prints the current string
-;	Input: char string[]
+;	Input: char string[], the user given string
 ;	Output: none
 ;   Used global variables: none
 ; REMARKS when using this function:
@@ -224,7 +227,7 @@ char ask_command(void)
 
 void print_string(char string[])
 {
-    printf("%s", string);
+    printf("Current string: %s", string);
 }
 
 /*********************************************************************
@@ -232,7 +235,7 @@ void print_string(char string[])
 ;---------------------------------------------------------------------
 ; NAME: read_string(char string[])
 ; DESCRIPTION: Reads a new string from the user, replacing previous
-;	Input: char string[]
+;	Input: char string[], the user given string
 ;	Output: none
 ;   Used global variables: none
 ; REMARKS when using this function:
@@ -241,12 +244,12 @@ void print_string(char string[])
 
 void read_string(char string[])
 {
-    printf("Give string:");
+    printf("Give string: ");
     fgets(string, MAX, stdin);
 
     string[strcspn(string, "\n")] = 0; /* Removes newline character from string */
 
-    printf("%s", string);
+    printf("New string: %s", string);
 }
 
 /*********************************************************************
@@ -255,7 +258,7 @@ void read_string(char string[])
 ; NAME: count_vowels(char string[])
 ; DESCRIPTION: Counts the number of vowels in the string
 ;	Input: char string[], the user given string
-;	Output: int vowels, number of vowels
+;	Output: int vowels, number of vowels in the string
 ;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
@@ -266,11 +269,12 @@ int count_vowels(char string[])
     int i = 0;
     int vowels = 0;
 
+    /* Looped until the string ending character */
     while (string[i] != '\0')
-    { /* Looped until the string ending character */
+    { /* Increase int vowels if the current character is a vowel */
         if (toupper(string[i]) == 'A' || toupper(string[i]) == 'E' || toupper(string[i]) == 'I' ||
             toupper(string[i]) == 'O' || toupper(string[i]) == 'U' || toupper(string[i]) == 'Y')
-        { /* Increase int vowels if the current character is a vowel */
+        {
             vowels++;
         }
         i++;
@@ -285,7 +289,7 @@ int count_vowels(char string[])
 ; NAME: count_consonants(char string[])
 ; DESCRIPTION: Counts the number of consonants in the string
 ;	Input: char string[], the user given string
-;	Output: int consonants, number of consonants
+;	Output: int consonants, number of consonants in the string
 ;   Used global variables: none
 ; REMARKS when using this function:
 ;       none
@@ -296,13 +300,14 @@ int count_consonants(char string[])
     int i = 0;
     int consonants = 0;
 
+    /* Looped until the string ending character */
     while (string[i] != '\0')
-    { /* Looped until the string ending character */
+    { /* Check if current character is an alphabet */
         if ((string[i] >= 'a' && string[i] <= 'z') || (string[i] >= 'A' && string[i] <= 'Z'))
-        { /* Check if current character is an alphabet */
+        { /* Only increase int consonants if the current letter is NOT a vowel */
             if (toupper(string[i]) != 'A' && toupper(string[i]) != 'E' && toupper(string[i]) != 'I' &&
                 toupper(string[i]) != 'O' && toupper(string[i]) != 'U' && toupper(string[i]) != 'Y')
-            { /* Only increase int consonants if the current alphabet is NOT a vowel */
+            {
                 consonants++;
             }
         }
@@ -328,13 +333,14 @@ void to_upper(char string[])
 {
     int i = 0;
 
+    /* Looped until the string ending character */
     while (string[i] != '\0')
-    { /* Looped until the string ending character */
+    {
         string[i] = toupper(string[i]);
         i++;
     }
 
-    printf("%s", string);
+    printf("String in uppercase: %s", string);
 }
 
 /*********************************************************************
@@ -353,13 +359,14 @@ void to_lower(char string[])
 {
     int i = 0;
 
+    /* Looped until the string ending character */
     while (string[i] != '\0')
-    { /* Looped until the string ending character */
+    {
         string[i] = tolower(string[i]);
         i++;
     }
 
-    printf("%s", string);
+    printf("String in lowercase: %s", string);
 }
 
 /*********************************************************************
@@ -371,7 +378,7 @@ void to_lower(char string[])
 ;	Output: none
 ;   Used global variables: none
 ; REMARKS when using this function:
-;       none
+;       textfile.txt needed in order for this to work
 ;*********************************************************************/
 
 void read_file(char string[])
@@ -380,15 +387,16 @@ void read_file(char string[])
 
     file_pointer = fopen("textfile.txt", "r");
 
+    /* Print a message if file doesn't exist */
     if (file_pointer == NULL)
     {
         printf("textfile.txt file failed to open.");
     }
     else
-    {
+    { /* Replace string with the content of textfile.txt */
         while (fgets(string, MAX, file_pointer) != NULL)
         {
-            printf("%s", string);
+            printf("New string from file: %s", string);
         }
         fclose(file_pointer);
     }
@@ -403,7 +411,7 @@ void read_file(char string[])
 ;	Output: none
 ;   Used global variables: none
 ; REMARKS when using this function:
-;       none
+;       textfile.txt needed in order for this to work
 ;*********************************************************************/
 
 void write_file(char string[])
@@ -412,17 +420,19 @@ void write_file(char string[])
 
     file_pointer = fopen("textfile.txt", "w");
 
+    /* Print a message if file doesn't exist */
     if (file_pointer == NULL)
     {
         printf("textfile.txt file failed to open.");
     }
     else
-    {
+    { /* Check that the string isn't empty */
         if (strlen(string) > 0)
         {
-            fputs(string, file_pointer);
-            fputs("\n", file_pointer);
+            fputs(string, file_pointer); /* Write string to file */
         }
         fclose(file_pointer);
+
+        printf("Wrote to textfile.txt: %s", string);
     }
 }
