@@ -233,7 +233,9 @@ void read_string(char string[])
 {
     printf("Give string:");
     fgets(string, 100, stdin);
+
     string[strcspn(string, "\n")] = 0; /* Removes newline character from string*/
+    
     printf("%s", string);
 }
 
