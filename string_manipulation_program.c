@@ -79,7 +79,8 @@ void write_file(char string[]);
 
 int main(void)
 {
-    char string[MAX] = "Hello world !!"; /* Initialize the string with a default value */
+    /* Initialize the string with a default value */
+    char string[MAX] = "Hello world !!";
 
     print_logo();
     display_menu();
@@ -90,6 +91,7 @@ int main(void)
     while (command != 'X')
     {
         command = ask_command();
+        
         switch (command)
         {
         case 'A':
@@ -194,7 +196,8 @@ void display_menu(void)
 
 char ask_command(void)
 {
-    char user_character[3]; /* Max three characters due to newline and string ending characters */
+    /* Max three characters due to newline and string ending characters */
+    char user_character[3];
 
     printf("\nGive command: \n");
     fgets(user_character, 3, stdin);
@@ -247,7 +250,8 @@ void read_string(char string[])
     printf("Give string: ");
     fgets(string, MAX, stdin);
 
-    string[strcspn(string, "\n")] = 0; /* Removes newline character from string */
+    /* Removes newline character from string */
+    string[strcspn(string, "\n")] = 0;
 
     printf("New string: %s", string);
 }
@@ -271,7 +275,7 @@ int count_vowels(char string[])
 
     /* Looped until the string ending character */
     while (string[i] != '\0')
-    { /* Increase int vowels if the current character is a vowel */
+    {   /* Increase int vowels if the current character is a vowel */
         if (toupper(string[i]) == 'A' || toupper(string[i]) == 'E' || toupper(string[i]) == 'I' ||
             toupper(string[i]) == 'O' || toupper(string[i]) == 'U' || toupper(string[i]) == 'Y')
         {
@@ -302,9 +306,9 @@ int count_consonants(char string[])
 
     /* Looped until the string ending character */
     while (string[i] != '\0')
-    { /* Check if current character is an alphabet */
+    {   /* Check if current character is a letter */
         if ((string[i] >= 'a' && string[i] <= 'z') || (string[i] >= 'A' && string[i] <= 'Z'))
-        { /* Only increase int consonants if the current letter is NOT a vowel */
+        {   /* Only increase int consonants if the current letter is NOT a vowel */
             if (toupper(string[i]) != 'A' && toupper(string[i]) != 'E' && toupper(string[i]) != 'I' &&
                 toupper(string[i]) != 'O' && toupper(string[i]) != 'U' && toupper(string[i]) != 'Y')
             {
@@ -393,7 +397,7 @@ void read_file(char string[])
         printf("textfile.txt file failed to open.");
     }
     else
-    { /* Replace string with the content of textfile.txt */
+    {   /* Replace string with the content of textfile.txt */
         while (fgets(string, MAX, file_pointer) != NULL)
         {
             printf("New string from file: %s", string);
@@ -426,10 +430,11 @@ void write_file(char string[])
         printf("textfile.txt file failed to open.");
     }
     else
-    { /* Check that the string isn't empty */
+    {   /* Check that the string isn't empty */
         if (strlen(string) > 0)
         {
-            fputs(string, file_pointer); /* Write string to file */
+            /* Write string to file */
+            fputs(string, file_pointer);
         }
         fclose(file_pointer);
 
