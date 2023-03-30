@@ -82,16 +82,17 @@ int main(void)
     /* Initialize the string with a default value */
     char string[MAX] = "Hello world !!";
 
+    /* Initialize the command character with 1, not leaving it empty */
+    char command = 1;
+
     print_logo();
     display_menu();
-
-    char command;
 
     /* If user given command is X, the program stops */
     while (command != 'X')
     {
         command = ask_command();
-        
+
         switch (command)
         {
         case 'A':
