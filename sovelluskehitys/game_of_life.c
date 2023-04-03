@@ -125,14 +125,14 @@ void create_next_day(struct cell board[MAX][MAX])
 int count_neighbours(struct cell board[MAX][MAX], int i, int j)
 {
     int sum =
-        board[i - 1][j - 1].current +
-        board[i][j - 1].current +
-        board[i + 1][j - 1].current +
-        board[i - 1][j].current +
-        board[i + 1][j].current +
-        board[i - 1][j + 1].current +
-        board[i][j + 1].current +
-        board[i + 1][j + 1].current;
+        board[i - 1][j - 1].current + /* Cell top left of cell examined */
+        board[i][j - 1].current + /* Cell on top of cell examined */
+        board[i + 1][j - 1].current + /* Cell top right of cell examined */
+        board[i - 1][j].current + /* Cell left of cell examined */
+        board[i + 1][j].current + /* Cell right of cell examined */
+        board[i - 1][j + 1].current + /* Cell bottom left of cell examined */
+        board[i][j + 1].current + /* Cell bottom of cell examined */
+        board[i + 1][j + 1].current; /* Cell bottom right of cell examined */
 
     return sum;
 }
