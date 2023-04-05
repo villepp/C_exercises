@@ -1,24 +1,89 @@
+/***************************************************************************
+ *   Copyright (C) 2023 by Ville Pitkänen   *
+ *   e2300558@edu.vamk.fi   *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+/***************************************************************************
+ *
+ * 1.  NAME
+ *     game_of_life.c
+ *
+ * 2.  DESCRIPTION
+ *     the game of life game :)
+ *
+ *
+ * 3.  VERSIONS
+ *       Original:
+ *         5.4.2023 / ville
+ *
+ *       Version history:
+ *
+ *
+ ***************************************************************************/
+
+/*--------------------------------------------------------------------------*
+ *    HEADER FILES                                                          *
+ *--------------------------------------------------------------------------*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ctype.h>
 
-#define MAX 20
+/*--------------------------------------------------------------------------*
+ *    GLOBAL VARIABLES                                                      *
+ *--------------------------------------------------------------------------*/
+/* Control flags */
 
+/* Global constants */
+#define MAX 10
+
+/* Global variables */
+
+/* Global structures */
 struct cell
 {
     int current; /* current situation, which is visible on screen */
     int future;  /* temporary calculation area for next round calculation */
 };
 
+enum
+{
+    DEAD,
+    ALIVE
+}; /* add creature status --?*/
+
+/*-------------------------------------------------------------------*
+ *    FUNCTION PROTOTYPES                                             *
+ *--------------------------------------------------------------------*/
 void generate_first_board(struct cell board[MAX][MAX]);
-void create_next_day(struct cell board[MAX][MAX]);
+void board_from_file(struct cell board[MAX][MAX]);
+void create_next_board(struct cell board[MAX][MAX]);
 int count_neighbours(struct cell board[MAX][MAX], int i, int j);
-void show_next_day(struct cell board[MAX][MAX]);
+void show_next_board(struct cell board[MAX][MAX]);
+
+/*********************************************************************
+ *    MAIN PROGRAM                                                      *
+ **********************************************************************/
 
 int main(void)
 {
     /* Initialize character used by user to choose whether to continue or not */
-    char continue_choise = 'f';
+    char continue_choice = 'f';
 
     /* Initialize board used for the game */
     struct cell board[MAX][MAX] = {0, 0};
@@ -26,47 +91,165 @@ int main(void)
     /* Generates first board and shows it to the user */
     generate_first_board(board);
 
-    /* Continue showing the next day until user inputs n*/
-    while (continue_choise != 'n')
+    /* Continue showing the next board until user inputs n*/
+
+    printf("Show the next  board?: y/n ");
+    scanf(" %c", &continue_choice);
+    continue_choice = tolower(continue_choice);
+
+    while (continue_choice != 'n')
     {
-        printf("Show the next  day?: y/n ");
-        scanf(" %c", &continue_choise);
+        /* Create the next board, count_neighbours function is also called inside this function */
+        create_next_board(board);
 
-        /* Create the next day, count_neighbours function is also called inside this function */
-        create_next_day(board);
+        /* Show the next board while also updating cells from future position to current */
+        show_next_board(board);
 
-        /* Show the next day while also updating cells from future position to current */
-        show_next_day(board);
+        printf("Show the next  board?: y/n ");
+        scanf(" %c", &continue_choice);
+        continue_choice = tolower(continue_choice);
     }
 
     printf("\nProgram stopped\n");
 
     return 0;
-}
+} /* end of main */
 
+/*********************************************************************
+ *    FUNCTIONS                                                       *
+ **********************************************************************/
+
+/*********************************************************************
+;	F U N C T I O N    D E S C R I P T I O N
+;---------------------------------------------------------------------
+; NAME: generate_first_board(struct cell board[MAX][MAX])
+; DESCRIPTION:  generates the first board randomly or calls function
+;               to generate it from file
+;	Input: struct cell board[MAX][MAX], an empty board
+;	Output: none
+;   Used global variables: none
+; REMARKS when using this function:
+;       none
+;*********************************************************************/
 void generate_first_board(struct cell board[MAX][MAX])
 {
     int i, j = 0;
     int random_number = 0;
+    char board_choice = 'a';
 
-    srand(time(NULL));
+    printf("Read board from file?: y/n ");
 
-    printf("Current board: \n\n");
+    scanf("%c", &board_choice);
+    board_choice = tolower(board_choice);
 
+    if (board_choice == 'n')
+    {
+
+        srand(time(NULL));
+
+        printf("Current board: \n\n");
+
+        for (i = 0; i <= MAX; i++)
+        {
+            for (j = 0; j <= MAX; j++)
+            {
+                if (i >= 1 && i < MAX && j >= 1 && j < MAX)
+                {
+                    random_number = rand() % 4;
+
+                    if (random_number == 1)
+                    {
+                        board[i][j].current = ALIVE;
+                        printf("o");
+                    }
+                    else
+                    {
+                        printf(" ");
+                    }
+                }
+                /* Print edges of the board */
+                else
+                {
+                    printf(".");
+                }
+            }
+            printf("\n");
+        }
+    }
+    else if (board_choice == 'y')
+    {
+        board_from_file(board);
+    }
+}
+
+/*********************************************************************
+;	F U N C T I O N    D E S C R I P T I O N
+;---------------------------------------------------------------------
+; NAME: board_from_file(struct cell board[MAX][MAX])
+; DESCRIPTION:  generates board from text file
+;	Input: struct cell board[MAX][MAX], an empty board
+;	Output: none
+;   Used global variables: none
+; REMARKS when using this function:
+;       none
+;*********************************************************************/
+void board_from_file(struct cell board[MAX][MAX])
+{
+    FILE *fp;
+    char state_c;
+    int state, c, r;
+
+    // struct cell board[MAX][MAX] = {0, 0};
+
+    c = 0;
+    r = 0;
+    fp = fopen("gameboard.txt", "r");
+
+    while (!feof(fp))
+    {
+
+        fscanf(fp, "%c", &state_c);
+
+        state = state_c - '0';
+
+        board[r][c].current = state;
+
+        c++;
+
+        if (c > MAX - 1)
+
+        {
+
+            r++;
+
+            c = 0;
+
+            /* reads the newline characters away */
+
+            fscanf(fp, "%c", &state_c); /* reads newline from file */
+
+#if defined(_WIN32) && (!defined(__unix__) || !defined(__unix) || (!defined(__APPLE__) && !defined(__MACH__)))
+
+            fscanf(fp, "%c", &state_c); /* reads carriage return from file in case of Windows */
+#endif
+        }
+    }
+
+    int i, j;
     for (i = 0; i <= MAX; i++)
     {
         for (j = 0; j <= MAX; j++)
         {
             if (i >= 1 && i < MAX && j >= 1 && j < MAX)
             {
-                random_number = rand() % 4;
-
-                if (random_number == 1)
+                if (board[i][j].current == ALIVE)
                 {
-                    board[i][j].current = 1;
+                    printf("o");
                 }
-
-                printf("%d", board[i][j].current);
+                else
+                {
+                    printf(" ");
+                }
             }
             /* Print edges of the board */
             else
@@ -78,7 +261,18 @@ void generate_first_board(struct cell board[MAX][MAX])
     }
 }
 
-void create_next_day(struct cell board[MAX][MAX])
+/*********************************************************************
+;	F U N C T I O N    D E S C R I P T I O N
+;---------------------------------------------------------------------
+; NAME: create_next_board(struct cell board[MAX][MAX])
+; DESCRIPTION:  generates the next board
+;	Input: struct cell board[MAX][MAX]
+;	Output: none
+;   Used global variables: none
+; REMARKS when using this function:
+;       Called inside while loop in main
+;*********************************************************************/
+void create_next_board(struct cell board[MAX][MAX])
 {
     int i, j = 0;
 
@@ -87,31 +281,31 @@ void create_next_day(struct cell board[MAX][MAX])
         for (j = 1; j < MAX; j++)
         {
             /* Alive cell */
-            if (board[i][j].current == 1)
+            if (board[i][j].current == ALIVE)
             {
                 int sum_alive = count_neighbours(board, i, j);
 
                 if (sum_alive == 2 || sum_alive == 3)
                 {
-                    board[i][j].future = 1;
+                    board[i][j].future = ALIVE;
                 }
                 else
                 {
-                    board[i][j].future = 0;
+                    board[i][j].future = DEAD;
                 }
             }
             /* Dead cell */
-            else if (board[i][j].current == 0)
+            else if (board[i][j].current == DEAD)
             {
                 int sum_dead = count_neighbours(board, i, j);
 
                 if (sum_dead == 3)
                 {
-                    board[i][j].future = 1;
+                    board[i][j].future = ALIVE;
                 }
                 else
                 {
-                    board[i][j].future = 0;
+                    board[i][j].future = DEAD;
                 }
             }
             else
@@ -122,22 +316,46 @@ void create_next_day(struct cell board[MAX][MAX])
     }
 }
 
+/*********************************************************************
+;	F U N C T I O N    D E S C R I P T I O N
+;---------------------------------------------------------------------
+; NAME: count_neighbours(struct cell board[MAX][MAX], int i, int j)
+; DESCRIPTION:  Counts the neighbours of the current cell examined
+;	Input: struct cell board[MAX][MAX], int i, int j
+;          int i and int j being the current cell position
+;	Output: int sum, the sum of the current neighbours
+;   Used global variables: none
+; REMARKS when using this function:
+;       Called inside the create_next_board function
+;*********************************************************************/
 int count_neighbours(struct cell board[MAX][MAX], int i, int j)
 {
     int sum =
         board[i - 1][j - 1].current + /* Cell top left of cell examined */
-        board[i][j - 1].current + /* Cell on top of cell examined */
+        board[i][j - 1].current +     /* Cell on top of cell examined */
         board[i + 1][j - 1].current + /* Cell top right of cell examined */
-        board[i - 1][j].current + /* Cell left of cell examined */
-        board[i + 1][j].current + /* Cell right of cell examined */
+        board[i - 1][j].current +     /* Cell left of cell examined */
+        board[i + 1][j].current +     /* Cell right of cell examined */
         board[i - 1][j + 1].current + /* Cell bottom left of cell examined */
-        board[i][j + 1].current + /* Cell bottom of cell examined */
-        board[i + 1][j + 1].current; /* Cell bottom right of cell examined */
+        board[i][j + 1].current +     /* Cell bottom of cell examined */
+        board[i + 1][j + 1].current;  /* Cell bottom right of cell examined */
 
     return sum;
 }
 
-void show_next_day(struct cell board[MAX][MAX])
+/*********************************************************************
+;	F U N C T I O N    D E S C R I P T I O N
+;---------------------------------------------------------------------
+; NAME: show_next_board(struct cell board[MAX][MAX])
+; DESCRIPTION:  prints the board for the next day
+;               also changes the state of future cells to current
+;	Input: struct cell board[MAX][MAX]
+;	Output: none
+;   Used global variables: none
+; REMARKS when using this function:
+;       Called inside the while loop in main
+;*********************************************************************/
+void show_next_board(struct cell board[MAX][MAX])
 {
     int i, j = 0;
 
@@ -150,7 +368,15 @@ void show_next_day(struct cell board[MAX][MAX])
             if (i >= 1 && i < MAX && j >= 1 && j < MAX)
             {
                 board[i][j].current = board[i][j].future;
-                printf("%d", board[i][j].current);
+
+                if (board[i][j].current == ALIVE)
+                {
+                    printf("o");
+                }
+                else
+                {
+                    printf(" ");
+                }
             }
             /* Print edges of the board */
             else
