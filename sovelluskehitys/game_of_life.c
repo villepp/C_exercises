@@ -70,6 +70,7 @@ enum
 /*-------------------------------------------------------------------*
  *    FUNCTION PROTOTYPES                                             *
  *--------------------------------------------------------------------*/
+void choose_board(struct cell board[MAX][MAX], char board_choice);
 void generate_first_board(struct cell board[MAX][MAX]);
 void board_from_file(struct cell board[MAX][MAX]);
 void create_next_board(struct cell board[MAX][MAX]);
@@ -82,21 +83,21 @@ void show_next_board(struct cell board[MAX][MAX]);
 
 int main(void)
 {
+    /* Initialize character used by user to choose whether to read board from file or not */
+    char board_choice = 'a';
     /* Initialize character used by user to choose whether to continue or not */
     char continue_choice = 'f';
 
     /* Initialize board used for the game */
     struct cell board[MAX][MAX] = {0, 0};
 
-    /* Generates first board and shows it to the user */
-    generate_first_board(board);
-
-    /* Continue showing the next board until user inputs n*/
+    choose_board(board, board_choice);
 
     printf("Show the next  board?: y/n ");
     scanf(" %c", &continue_choice);
     continue_choice = tolower(continue_choice);
 
+    /* Continue showing the next board until user inputs n*/
     while (continue_choice != 'n')
     {
         /* Create the next board, count_neighbours function is also called inside this function */
@@ -122,6 +123,42 @@ int main(void)
 /*********************************************************************
 ;	F U N C T I O N    D E S C R I P T I O N
 ;---------------------------------------------------------------------
+; NAME: choose_board(struct cell board[MAX][MAX], char board_choice)
+; DESCRIPTION:  prompts user whether to read gameboard from file or
+;               generate the board randomly
+;	Input: struct cell board[MAX][MAX], char board_choice
+;	Output: none
+;   Used global variables: none
+; REMARKS when using this function:
+;       calls itself recursively if given an invalid input
+;*********************************************************************/
+void choose_board(struct cell board[MAX][MAX], char board_choice)
+{
+    printf("Read board from file?: y/n ");
+    scanf(" %c", &board_choice);
+    board_choice = tolower(board_choice);
+
+    if (board_choice == 'n')
+    {
+        /* Generate first board and shows it to the user */
+        generate_first_board(board);
+    }
+    else if (board_choice == 'y')
+    {
+        /* Generate first board from file and shows it to the user */
+        board_from_file(board);
+        //TODO lisää vaihtoehto, että käyttäjä voi lisätä elossa olevia cellejä haluamiinsa koordinaatteihin
+    }
+    else
+    {
+        printf("\nInvalid input... \n");
+        choose_board(board, board_choice);
+    }
+}
+
+/*********************************************************************
+;	F U N C T I O N    D E S C R I P T I O N
+;---------------------------------------------------------------------
 ; NAME: generate_first_board(struct cell board[MAX][MAX])
 ; DESCRIPTION:  generates the first board randomly or calls function
 ;               to generate it from file
@@ -135,50 +172,36 @@ void generate_first_board(struct cell board[MAX][MAX])
 {
     int i, j = 0;
     int random_number = 0;
-    char board_choice = 'a';
 
-    printf("Read board from file?: y/n ");
+    srand(time(NULL));
 
-    scanf("%c", &board_choice);
-    board_choice = tolower(board_choice);
+    printf("Current board: \n\n");
 
-    if (board_choice == 'n')
+    for (i = 0; i <= MAX; i++)
     {
-
-        srand(time(NULL));
-
-        printf("Current board: \n\n");
-
-        for (i = 0; i <= MAX; i++)
+        for (j = 0; j <= MAX; j++)
         {
-            for (j = 0; j <= MAX; j++)
+            if (i >= 1 && i < MAX && j >= 1 && j < MAX)
             {
-                if (i >= 1 && i < MAX && j >= 1 && j < MAX)
-                {
-                    random_number = rand() % 4;
+                random_number = rand() % 4;
 
-                    if (random_number == 1)
-                    {
-                        board[i][j].current = ALIVE;
-                        printf("o");
-                    }
-                    else
-                    {
-                        printf(" ");
-                    }
+                if (random_number == 1)
+                {
+                    board[i][j].current = ALIVE;
+                    printf("o");
                 }
-                /* Print edges of the board */
                 else
                 {
-                    printf(".");
+                    printf(" ");
                 }
             }
-            printf("\n");
+            /* Print edges of the board */
+            else
+            {
+                printf(".");
+            }
         }
-    }
-    else if (board_choice == 'y')
-    {
-        board_from_file(board);
+        printf("\n");
     }
 }
 
@@ -198,8 +221,6 @@ void board_from_file(struct cell board[MAX][MAX])
     FILE *fp;
     char state_c;
     int state, c, r;
-
-    // struct cell board[MAX][MAX] = {0, 0};
 
     c = 0;
     r = 0;
