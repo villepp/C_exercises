@@ -25,11 +25,18 @@
  *
  * 2.  DESCRIPTION
  *     the game of life game :)
- *
+ *     1. Any live cell with fewer than two live neighbours dies,
+ *     as if by underpopulation.
+ *     2. Any live cell with two or three live neighbours lives on to
+ *     the next generation.
+ *     3. Any live cell with more than three live neighbours dies, as
+ *     if by overpopulation.
+ *     4. Any dead cell with exactly three live neighbours becomes a live
+ *     cell, as if by reproduction.
  *
  * 3.  VERSIONS
  *       Original:
- *         5.4.2023 / ville
+ *         12.4.2023 / ville
  *
  *       Version history:
  *
@@ -50,7 +57,11 @@
 /* Control flags */
 
 /* Global constants */
-#define MAX 10
+#define ROWS 10
+#define COLUMNS 10
+#define ALIVE_CELL "o"
+#define DEAD_CELL " "
+#define WALL "."
 
 /* Global variables */
 
@@ -61,6 +72,7 @@ struct cell
     int future;  /* temporary calculation area for next round calculation */
 };
 
+/* Enumerations */
 enum
 {
     DEAD,
@@ -70,12 +82,12 @@ enum
 /*-------------------------------------------------------------------*
  *    FUNCTION PROTOTYPES                                             *
  *--------------------------------------------------------------------*/
-void choose_board(struct cell board[MAX][MAX], char board_choice);
-void generate_first_board(struct cell board[MAX][MAX]);
-void board_from_file(struct cell board[MAX][MAX]);
-void create_next_board(struct cell board[MAX][MAX]);
-int count_neighbours(struct cell board[MAX][MAX], int i, int j);
-void show_next_board(struct cell board[MAX][MAX]);
+void choose_board(struct cell board[COLUMNS][ROWS], char board_choice);
+void generate_first_board(struct cell board[COLUMNS][ROWS]);
+void board_from_file(struct cell board[COLUMNS][ROWS]);
+void create_next_board(struct cell board[COLUMNS][ROWS]);
+int count_neighbours(struct cell board[COLUMNS][ROWS], int i, int j);
+void show_next_board(struct cell board[COLUMNS][ROWS]);
 
 /*********************************************************************
  *    MAIN PROGRAM                                                      *
@@ -89,7 +101,7 @@ int main(void)
     char continue_choice = 'f';
 
     /* Initialize board used for the game */
-    struct cell board[MAX][MAX] = {0, 0};
+    struct cell board[COLUMNS][ROWS] = {0, 0};
 
     choose_board(board, board_choice);
 
@@ -132,7 +144,7 @@ int main(void)
 ; REMARKS when using this function:
 ;       calls itself recursively if given an invalid input
 ;*********************************************************************/
-void choose_board(struct cell board[MAX][MAX], char board_choice)
+void choose_board(struct cell board[COLUMNS][ROWS], char board_choice)
 {
     printf("Read board from file?: y/n ");
     scanf(" %c", &board_choice);
@@ -147,7 +159,6 @@ void choose_board(struct cell board[MAX][MAX], char board_choice)
     {
         /* Generate first board from file and shows it to the user */
         board_from_file(board);
-        //TODO lisää vaihtoehto, että käyttäjä voi lisätä elossa olevia cellejä haluamiinsa koordinaatteihin
     }
     else
     {
@@ -168,7 +179,7 @@ void choose_board(struct cell board[MAX][MAX], char board_choice)
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
-void generate_first_board(struct cell board[MAX][MAX])
+void generate_first_board(struct cell board[COLUMNS][ROWS])
 {
     int i, j = 0;
     int random_number = 0;
@@ -177,28 +188,28 @@ void generate_first_board(struct cell board[MAX][MAX])
 
     printf("Current board: \n\n");
 
-    for (i = 0; i <= MAX; i++)
+    for (i = 0; i <= COLUMNS; i++)
     {
-        for (j = 0; j <= MAX; j++)
+        for (j = 0; j <= ROWS; j++)
         {
-            if (i >= 1 && i < MAX && j >= 1 && j < MAX)
+            if (i >= 1 && i < COLUMNS && j >= 1 && j < ROWS)
             {
                 random_number = rand() % 4;
 
                 if (random_number == 1)
                 {
                     board[i][j].current = ALIVE;
-                    printf("o");
+                    printf(ALIVE_CELL);
                 }
                 else
                 {
-                    printf(" ");
+                    printf(DEAD_CELL);
                 }
             }
             /* Print edges of the board */
             else
             {
-                printf(".");
+                printf(WALL);
             }
         }
         printf("\n");
@@ -216,7 +227,7 @@ void generate_first_board(struct cell board[MAX][MAX])
 ; REMARKS when using this function:
 ;       none
 ;*********************************************************************/
-void board_from_file(struct cell board[MAX][MAX])
+void board_from_file(struct cell board[COLUMNS][ROWS])
 {
     FILE *fp;
     char state_c;
@@ -228,25 +239,21 @@ void board_from_file(struct cell board[MAX][MAX])
 
     while (!feof(fp))
     {
-
         fscanf(fp, "%c", &state_c);
 
         state = state_c - '0';
-
         board[r][c].current = state;
 
         c++;
 
-        if (c > MAX - 1)
+        if (c >= COLUMNS)
 
         {
-
             r++;
 
             c = 0;
 
             /* reads the newline characters away */
-
             fscanf(fp, "%c", &state_c); /* reads newline from file */
 
 #if defined(_WIN32) && (!defined(__unix__) || !defined(__unix) || (!defined(__APPLE__) && !defined(__MACH__)))
@@ -257,25 +264,25 @@ void board_from_file(struct cell board[MAX][MAX])
     }
 
     int i, j;
-    for (i = 0; i <= MAX; i++)
+    for (i = 0; i <= COLUMNS; i++)
     {
-        for (j = 0; j <= MAX; j++)
+        for (j = 0; j <= ROWS; j++)
         {
-            if (i >= 1 && i < MAX && j >= 1 && j < MAX)
+            if (i >= 1 && i < COLUMNS && j >= 1 && j < ROWS)
             {
                 if (board[i][j].current == ALIVE)
                 {
-                    printf("o");
+                    printf(ALIVE_CELL);
                 }
                 else
                 {
-                    printf(" ");
+                    printf(DEAD_CELL);
                 }
             }
             /* Print edges of the board */
             else
             {
-                printf(".");
+                printf(WALL);
             }
         }
         printf("\n");
@@ -293,13 +300,13 @@ void board_from_file(struct cell board[MAX][MAX])
 ; REMARKS when using this function:
 ;       Called inside while loop in main
 ;*********************************************************************/
-void create_next_board(struct cell board[MAX][MAX])
+void create_next_board(struct cell board[COLUMNS][ROWS])
 {
     int i, j = 0;
 
-    for (i = 1; i < MAX; i++)
+    for (i = 1; i < COLUMNS; i++)
     {
-        for (j = 1; j < MAX; j++)
+        for (j = 1; j < ROWS; j++)
         {
             /* Alive cell */
             if (board[i][j].current == ALIVE)
@@ -349,7 +356,7 @@ void create_next_board(struct cell board[MAX][MAX])
 ; REMARKS when using this function:
 ;       Called inside the create_next_board function
 ;*********************************************************************/
-int count_neighbours(struct cell board[MAX][MAX], int i, int j)
+int count_neighbours(struct cell board[COLUMNS][ROWS], int i, int j)
 {
     int sum =
         board[i - 1][j - 1].current + /* Cell top left of cell examined */
@@ -376,33 +383,33 @@ int count_neighbours(struct cell board[MAX][MAX], int i, int j)
 ; REMARKS when using this function:
 ;       Called inside the while loop in main
 ;*********************************************************************/
-void show_next_board(struct cell board[MAX][MAX])
+void show_next_board(struct cell board[COLUMNS][ROWS])
 {
     int i, j = 0;
 
     printf("\n\nNew board : \n\n");
 
-    for (i = 0; i <= MAX; i++)
+    for (i = 0; i <= COLUMNS; i++)
     {
-        for (j = 0; j <= MAX; j++)
+        for (j = 0; j <= ROWS; j++)
         {
-            if (i >= 1 && i < MAX && j >= 1 && j < MAX)
+            if (i >= 1 && i < COLUMNS && j >= 1 && j < ROWS)
             {
                 board[i][j].current = board[i][j].future;
 
                 if (board[i][j].current == ALIVE)
                 {
-                    printf("o");
+                    printf(ALIVE_CELL);
                 }
                 else
                 {
-                    printf(" ");
+                    printf(DEAD_CELL);
                 }
             }
             /* Print edges of the board */
             else
             {
-                printf(".");
+                printf(WALL);
             }
         }
         printf("\n");
