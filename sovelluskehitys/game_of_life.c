@@ -36,7 +36,7 @@
  *
  * 3.  VERSIONS
  *       Original:
- *         12.4.2023 / ville
+ *         15.4.2023 / ville
  *
  *       Version history:
  *
@@ -50,6 +50,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <ncurses.h>
+#include <stdbool.h>
+#include <locale.h>
 
 /*--------------------------------------------------------------------------*
  *    GLOBAL VARIABLES                                                      *
@@ -57,11 +60,13 @@
 /* Control flags */
 
 /* Global constants */
-#define ROWS 10
-#define COLUMNS 10
-#define ALIVE_CELL "o"
+#define ROWS 30
+#define COLUMNS 15
+#define ALIVE_CELL " "
 #define DEAD_CELL " "
-#define WALL "."
+#define WALL " "
+
+
 
 /* Global variables */
 
@@ -103,6 +108,19 @@ int main(void)
     /* Initialize board used for the game */
     struct cell board[COLUMNS][ROWS] = {0, 0};
 
+    setlocale(LC_ALL, "");
+
+    /* Ncurses initialization */
+    initscr();
+    start_color();
+    use_default_colors();
+    cbreak();
+    noecho();
+
+    init_pair(1, COLOR_BLACK, COLOR_CYAN); /* Wall */
+    init_pair(2, COLOR_BLUE, COLOR_GREEN); /* Dead cell */
+    init_pair(3, COLOR_RED, COLOR_RED);   /* Alive cell */
+
     choose_board(board, board_choice);
 
     printf("Show the next  board?: y/n ");
@@ -124,6 +142,8 @@ int main(void)
     }
 
     printf("\nProgram stopped\n");
+
+    endwin();
 
     return 0;
 } /* end of main */
@@ -186,12 +206,13 @@ void generate_first_board(struct cell board[COLUMNS][ROWS])
 
     srand(time(NULL));
 
-    printf("Current board: \n\n");
+    printw("Current board: \n\n");
 
     for (i = 0; i <= COLUMNS; i++)
     {
         for (j = 0; j <= ROWS; j++)
         {
+            move(i, j);
             if (i >= 1 && i < COLUMNS && j >= 1 && j < ROWS)
             {
                 random_number = rand() % 4;
@@ -199,21 +220,27 @@ void generate_first_board(struct cell board[COLUMNS][ROWS])
                 if (random_number == 1)
                 {
                     board[i][j].current = ALIVE;
-                    printf(ALIVE_CELL);
+                    attron(COLOR_PAIR(3));
+                    printw(ALIVE_CELL);
+                    attroff(COLOR_PAIR(3));
                 }
                 else
                 {
-                    printf(DEAD_CELL);
+                    attron(COLOR_PAIR(2));
+                    printw(DEAD_CELL);
+                    attroff(COLOR_PAIR(2));
                 }
             }
             /* Print edges of the board */
             else
             {
-                printf(WALL);
+                attron(COLOR_PAIR(1));
+                printw(WALL);
+                attroff(COLOR_PAIR(1));
             }
         }
-        printf("\n");
     }
+    refresh();
 }
 
 /*********************************************************************
@@ -268,25 +295,32 @@ void board_from_file(struct cell board[COLUMNS][ROWS])
     {
         for (j = 0; j <= ROWS; j++)
         {
+            move(i, j);
             if (i >= 1 && i < COLUMNS && j >= 1 && j < ROWS)
             {
                 if (board[i][j].current == ALIVE)
                 {
-                    printf(ALIVE_CELL);
+                    attron(COLOR_PAIR(3));
+                    printw(ALIVE_CELL);
+                    attroff(COLOR_PAIR(3));
                 }
                 else
                 {
-                    printf(DEAD_CELL);
+                    attron(COLOR_PAIR(2));
+                    printw(DEAD_CELL);
+                    attroff(COLOR_PAIR(2));
                 }
             }
             /* Print edges of the board */
             else
             {
-                printf(WALL);
-            }
+                attron(COLOR_PAIR(1));
+                printw(WALL);
+                attroff(COLOR_PAIR(1));
+            }   
         }
-        printf("\n");
     }
+    refresh();
 }
 
 /*********************************************************************
@@ -338,7 +372,7 @@ void create_next_board(struct cell board[COLUMNS][ROWS])
             }
             else
             {
-                printf("\n!!!error!!!\n");
+                printw("\n!!!error!!!\n");
             }
         }
     }
@@ -387,7 +421,10 @@ void show_next_board(struct cell board[COLUMNS][ROWS])
 {
     int i, j = 0;
 
-    printf("\n\nNew board : \n\n");
+    clear();
+    move(0, 0);
+
+    printw("\n\nNew board : \n\n");
 
     for (i = 0; i <= COLUMNS; i++)
     {
@@ -399,19 +436,26 @@ void show_next_board(struct cell board[COLUMNS][ROWS])
 
                 if (board[i][j].current == ALIVE)
                 {
-                    printf(ALIVE_CELL);
+                    attron(COLOR_PAIR(3));
+                    printw(ALIVE_CELL);
+                    attroff(COLOR_PAIR(3));
                 }
                 else
                 {
-                    printf(DEAD_CELL);
+                    attron(COLOR_PAIR(2));
+                    printw(DEAD_CELL);
+                    attroff(COLOR_PAIR(2));
                 }
             }
             /* Print edges of the board */
             else
             {
-                printf(WALL);
+                attron(COLOR_PAIR(1));
+                printw(WALL);
+                attroff(COLOR_PAIR(1));
             }
         }
-        printf("\n");
+        printw("\n");
     }
+    refresh();
 }
